@@ -46,8 +46,8 @@ export function AppWindow({ win, title, icon, mobile, viewport, active, dispatch
   const onTitleDown = (e: RPointerEvent<HTMLDivElement>) => {
     focus();
     if (max || e.button !== 0 || (e.target as HTMLElement).closest("button")) return;
-    const rect = ref.current!.getBoundingClientRect();
-    drag.current = { dx: e.clientX - rect.left, dy: e.clientY - rect.top, id: e.pointerId };
+    // From the stored position, not getBoundingClientRect: the open animation scales the window.
+    drag.current = { dx: e.clientX - win.pos.x, dy: e.clientY - win.pos.y, id: e.pointerId };
     e.currentTarget.setPointerCapture(e.pointerId);
     document.body.style.userSelect = "none";
     setDragging(true);

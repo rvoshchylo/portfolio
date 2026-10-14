@@ -97,6 +97,7 @@ test("windows drag, minimize to the dock and restore (desktop only)", async ({ p
   test.skip(isMobile, "windows are full-screen on phones");
   await page.goto("/?skip#about");
   const win = page.getByRole("dialog", { name: "about.exe" });
+  await page.waitForTimeout(400); // let the open animation settle so boundingBox is unscaled
   const before = (await win.boundingBox())!;
   await page.mouse.move(before.x + 120, before.y + 16);
   await page.mouse.down();
