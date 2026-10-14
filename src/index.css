@@ -307,12 +307,10 @@ textarea:focus-visible {
   pointer-events: none;
 }
 .boot-camera {
+  /* size + centring margins are set inline from the device geometry */
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 600px;
-  height: 390px;
-  margin: -195px 0 0 -300px;
   transform-origin: 50% 50%;
 }
 .boot-scene {
@@ -560,6 +558,216 @@ textarea:focus-visible {
   transform: translateZ(-26px);
   background: radial-gradient(closest-side, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.4) 55%, transparent 100%);
   filter: blur(18px);
+}
+
+/* ============================== Boot: tablet + phone ==============================
+   Body is a 3D box: front face (bezel + screen), back face, four edge strips.
+   --t = thickness, --r = corner radius (edges are inset by it). */
+.dv {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transform-origin: 50% 50%;
+}
+.dv-face {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.dv-edge {
+  position: absolute;
+  background: linear-gradient(90deg, #26262e, #4a4a56 50%, #26262e);
+  border-radius: 3px;
+}
+.dv-edge.t,
+.dv-edge.b {
+  left: calc(var(--r) * 0.8);
+  right: calc(var(--r) * 0.8);
+  height: var(--t);
+  transform-origin: 50% 0;
+  transform: rotateX(-90deg);
+}
+.dv-edge.t { top: 0; }
+.dv-edge.b { top: 100%; }
+.dv-edge.l,
+.dv-edge.r {
+  top: calc(var(--r) * 0.8);
+  bottom: calc(var(--r) * 0.8);
+  width: var(--t);
+  transform-origin: 0 50%;
+  transform: rotateY(90deg);
+  background: linear-gradient(180deg, #26262e, #4a4a56 50%, #26262e);
+}
+.dv-edge.l { left: 0; }
+.dv-edge.r { left: 100%; }
+.dv-logo {
+  opacity: 0.8;
+  filter: drop-shadow(0 0 16px rgba(167, 139, 250, 0.5));
+}
+.dev-shadow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 100%;
+  height: 50%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.35) 60%, transparent);
+  filter: blur(14px);
+  transform: translate3d(-50%, -50%, 0);
+  pointer-events: none;
+}
+
+/* Phone */
+.ph {
+  --t: 9px;
+  --r: 46px;
+}
+.ph-front {
+  background: #060608;
+  box-shadow: inset 0 0 0 1.5px #3a3a44, inset 0 0 0 3.5px #0d0d10;
+  padding: 10px;
+}
+.ph-screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 37px;
+  overflow: hidden;
+  background: #000;
+}
+.ph-cam {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  width: 11px;
+  height: 11px;
+  margin-left: -5.5px;
+  border-radius: 99px;
+  background: radial-gradient(circle at 35% 35%, #2b3550, #000 65%);
+  z-index: 6;
+}
+.ph-back,
+.tb-back {
+  transform: translateZ(calc(var(--t) * -1)) rotateY(180deg);
+  background:
+    radial-gradient(120% 70% at 30% 0%, rgba(255, 255, 255, 0.12), transparent 50%),
+    linear-gradient(160deg, #3b3650 0%, #22202d 50%, #16151d 100%);
+  box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.1);
+  display: grid;
+  place-items: center;
+}
+.ph-module {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 104px;
+  height: 104px;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12), 0 4px 10px rgba(0, 0, 0, 0.35);
+}
+.ph-lens {
+  position: absolute;
+  left: 12px;
+  width: 38px;
+  height: 38px;
+  border-radius: 99px;
+  background: radial-gradient(circle at 40% 35%, #3a4a78 0 18%, #0b0b12 45%, #000 70%);
+  box-shadow: 0 0 0 3px #2a2a33, 0 0 0 4px rgba(255, 255, 255, 0.12);
+}
+.ph-lens.a { top: 12px; }
+.ph-lens.b { top: 56px; }
+.ph-flash {
+  position: absolute;
+  top: 22px;
+  right: 18px;
+  width: 12px;
+  height: 12px;
+  border-radius: 99px;
+  background: radial-gradient(#fff8e0, #b9a77a);
+}
+.ph-btn {
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  border-radius: 2px;
+  background: #5c5c68;
+}
+.ph-btn.power { top: 110px; height: 56px; }
+.ph-btn.vol { top: 190px; height: 90px; }
+
+/* Tablet */
+.tb {
+  --t: 7px;
+  --r: 26px;
+}
+.tb-front {
+  background: #060608;
+  box-shadow: inset 0 0 0 1.5px #3a3a44, inset 0 0 0 3px #0d0d10;
+  padding: 16px;
+}
+.tb-screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #000;
+}
+.tb-cam {
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  margin-left: -3px;
+  border-radius: 99px;
+  background: radial-gradient(circle at 35% 35%, #2b3550, #050508 70%);
+}
+.tb-lens {
+  position: absolute;
+  top: 22px;
+  left: 22px;
+  width: 30px;
+  height: 30px;
+  border-radius: 99px;
+  background: radial-gradient(circle at 40% 35%, #3a4a78 0 18%, #0b0b12 45%, #000 70%);
+  box-shadow: 0 0 0 3px #2a2a33;
+}
+.tb-cover {
+  position: absolute;
+  inset: 0;
+  transform-origin: 0 50%;
+  transform-style: preserve-3d;
+}
+.tb-cover-out,
+.tb-cover-in {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.tb-cover-out {
+  background:
+    linear-gradient(90deg, transparent 33%, rgba(0, 0, 0, 0.25) 33.2%, transparent 33.6%, transparent 66.4%, rgba(0, 0, 0, 0.25) 66.6%, transparent 67%),
+    radial-gradient(120% 80% at 20% 0%, rgba(255, 255, 255, 0.12), transparent 55%),
+    linear-gradient(150deg, #4a3f78 0%, #2d2650 55%, #1d1a33 100%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  display: grid;
+  place-items: center;
+}
+.tb-cover-logo {
+  opacity: 0.45;
+}
+.tb-cover-in {
+  transform: rotateY(180deg);
+  background:
+    linear-gradient(90deg, transparent 33%, rgba(255, 255, 255, 0.05) 33.2%, transparent 33.6%, transparent 66.4%, rgba(255, 255, 255, 0.05) 66.6%, transparent 67%),
+    linear-gradient(150deg, #2a2a33, #1a1a20);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
 }
 
 /* Screen layers */

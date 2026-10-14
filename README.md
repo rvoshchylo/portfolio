@@ -2,7 +2,15 @@
 
 **Live:** https://rvoshchylo.github.io/portfolio/
 
-A developer portfolio styled as a tiny desktop OS. A 3D laptop opens, boots and logs in, then the camera dives into the screen and you land on a desktop with draggable windows, a dock and a working terminal.
+A developer portfolio styled as a tiny desktop OS. A 3D device boots and logs in, then the camera dives into its screen and you land on a desktop with draggable windows, a dock and a working terminal.
+
+The intro device matches the screen width:
+
+| Width | Intro |
+| --- | --- |
+| < 768px | a phone lying face-down flips over and wakes |
+| 768–1199px | a tablet's folio cover swings open like a book; the tablet follows the screen orientation |
+| ≥ 1200px | a laptop lid opens while the camera orbits to the front |
 
 **Stack:** React 18 · TypeScript · Vite · Tailwind CSS · Vitest · Playwright · GitHub Pages
 
@@ -43,5 +51,3 @@ npm run build        # production build to dist/
 Every push to `main` runs the type check, the unit tests and the e2e tests, then deploys `dist/` to GitHub Pages (`.github/workflows/deploy.yml`). One-time setup: **Settings → Pages → Source: GitHub Actions**.
 
 The build uses a relative base, so it works both as `https://<user>.github.io/` and as `https://<user>.github.io/<repo>/`.
-
-`design/` holds the original Claude Design prototype and chat this site was built from.

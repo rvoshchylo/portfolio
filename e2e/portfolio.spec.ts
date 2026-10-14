@@ -7,11 +7,12 @@ const errorsOf = (page: Page) => {
   return errors;
 };
 
-test("boot plays through the laptop intro and lands on the desktop", async ({ page }) => {
+test("boot plays through the device intro and lands on the desktop", async ({ page, isMobile }) => {
   const errors = errorsOf(page);
   await page.goto("/?boot");
   const boot = page.getByTestId("boot");
   await expect(boot).toBeVisible();
+  await expect(boot).toHaveAttribute("data-device", isMobile ? "phone" : "laptop");
   await expect(boot).toHaveAttribute("data-stage", "brand", { timeout: 4000 });
   await expect(boot).toHaveAttribute("data-stage", "login", { timeout: 4000 });
   await expect(page.getByTestId("boot").getByText("Ruslan Voshchylo")).toBeVisible();
@@ -20,6 +21,24 @@ test("boot plays through the laptop intro and lands on the desktop", async ({ pa
   await expect(page.getByText("Ruslan.portfolio")).toBeVisible();
   expect(errors).toEqual([]);
 });
+
+for (const [name, viewport] of [
+  ["landscape", { width: 1024, height: 768 }],
+  ["portrait", { width: 820, height: 1180 }],
+] as const) {
+  test(`tablet-width screens get the tablet intro (${name})`, async ({ page, isMobile }) => {
+    test.skip(isMobile, "viewport override only on the desktop project");
+    const errors = errorsOf(page);
+    await page.setViewportSize(viewport);
+    await page.goto("/?boot");
+    const boot = page.getByTestId("boot");
+    await expect(boot).toHaveAttribute("data-device", "tablet");
+    await expect(boot).toHaveAttribute("data-stage", "login", { timeout: 6000 });
+    await expect(boot).toBeHidden({ timeout: 8000 });
+    await expect(page.getByTestId("desktop")).toBeVisible();
+    expect(errors).toEqual([]);
+  });
+}
 
 test("any key skips the intro, and it is not replayed in the same session", async ({ page }) => {
   await page.goto("/?boot");
@@ -97,7 +116,8 @@ test("windows drag, minimize to the dock and restore (desktop only)", async ({ p
   test.skip(isMobile, "windows are full-screen on phones");
   await page.goto("/?skip#about");
   const win = page.getByRole("dialog", { name: "about.exe" });
-  await page.waitForTimeout(400); // let the open animation settle so boundingBox is unscaled
+  // let the spring-in animation finish so boundingBox is unscaled
+  await win.evaluate((el) => Promise.all(el.getAnimations().map((a) => a.finished)));
   const before = (await win.boundingBox())!;
   await page.mouse.move(before.x + 120, before.y + 16);
   await page.mouse.down();

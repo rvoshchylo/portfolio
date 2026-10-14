@@ -18,6 +18,16 @@ export function AppWindow({ win, title, icon, mobile, viewport, active, dispatch
   const ref = useRef<HTMLDivElement>(null);
   const drag = useRef<{ dx: number; dy: number; id: number } | null>(null);
   const [dragging, setDragging] = useState(false);
+  // Geometry transitions only while maximizing/restoring, never after a drag.
+  const [resizing, setResizing] = useState(false);
+  const prevMax = useRef(win.maximized);
+  useEffect(() => {
+    if (prevMax.current === win.maximized) return;
+    prevMax.current = win.maximized;
+    setResizing(true);
+    const t = window.setTimeout(() => setResizing(false), 320);
+    return () => window.clearTimeout(t);
+  }, [win.maximized]);
   const max = mobile || win.maximized;
 
   // Spring in on first open and every restore from the dock.
@@ -100,7 +110,7 @@ export function AppWindow({ win, title, icon, mobile, viewport, active, dispatch
       role="dialog"
       aria-label={title}
       data-window={win.id}
-      className={"absolute frost-strong overflow-hidden flex flex-col " + (win.closing ? "win-out " : "") + (dragging ? "" : "win-geom")}
+      className={"absolute frost-strong overflow-hidden flex flex-col " + (win.closing ? "win-out " : "") + (resizing && !dragging ? "win-geom" : "")}
       style={{
         ...geom,
         zIndex: win.z,
