@@ -1,5 +1,7 @@
 # PortOS: Ruslan Voshchylo's portfolio
 
+**Live:** https://rvoshchylo.github.io/portfolio/
+
 A developer portfolio styled as a tiny desktop OS. A 3D laptop opens, boots and logs in, then the camera dives into the screen and you land on a desktop with draggable windows, a dock and a working terminal.
 
 **Stack:** React 18 · TypeScript · Vite · Tailwind CSS · Vitest · Playwright · GitHub Pages
