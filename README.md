@@ -1,25 +1,45 @@
-# CODING AGENTS: READ THIS FIRST
+# PortOS: Ruslan Voshchylo's portfolio
 
-This is a **handoff bundle** from Claude Design (claude.ai/design).
+A developer portfolio styled as a tiny desktop OS. A 3D laptop opens, boots and logs in, then the camera dives into the screen and you land on a desktop with draggable windows, a dock and a working terminal.
 
-A user mocked up designs in HTML/CSS/JS using an AI design tool, then exported this bundle so a coding agent can implement the designs for real.
+**Stack:** React 18 · TypeScript · Vite · Tailwind CSS · Vitest · Playwright · GitHub Pages
 
-## What you should do — IMPORTANT
+## What's inside
 
-**Read the chat transcripts first.** There are 1 chat transcript(s) in `chats/`. The transcripts show the full back-and-forth between the user and the design assistant — they tell you **what the user actually wants** and **where they landed** after iterating. Don't skip them. The final HTML files are the output, but the chat is where the intent lives.
+| Window | What it shows |
+| --- | --- |
+| `about.exe` | Bio, stats, résumé download |
+| `experience.exe` | SoftKit and VISO as a `git log --graph`, plus education; project chips deep-link into projects |
+| `projects.exe` | Aksel, Gogeta, Teach Aid, Tripami: cards with metrics and a detail view per project |
+| `skills.exe` | Five skill groups from the CV |
+| `contact.exe` | Email, GitHub, LinkedIn, Telegram, plus a validated form that opens a pre-filled email draft |
+| `terminal` | `help`, `whoami`, `ls`, `cat projects/aksel`, `open skills`, `resume`, `hire-me`… with history and tab completion |
 
-**Read `project/PortOS.html` in full.** The user had this file open when they triggered the handoff, so it's almost certainly the primary design they want built. Read it top to bottom — don't skim. Then **follow its imports**: open every file it pulls in (shared components, CSS, scripts) so you understand how the pieces fit together before you start implementing.
+Other details:
 
-**If anything is ambiguous, ask the user to confirm before you start implementing.** It's much cheaper to clarify scope up front than to build the wrong thing.
+- The boot intro plays once per browser session. Click or press any key to skip it. `?boot` forces it, `?skip` disables it, and it is skipped automatically when the visitor prefers reduced motion.
+- `#projects`, `#contact` and so on open that window directly, and the hash follows the focused window, so links are shareable.
+- On phones, windows open full-screen and icons open with a single tap.
+- Keyboard: `Esc` closes the focused window, `⌥T` opens a terminal, and double-clicking a titlebar maximizes it.
 
-## About the design files
+## Editing content
 
-The design medium is **HTML/CSS/JS** — these are prototypes, not production code. Your job is to **recreate them pixel-perfectly** in whatever technology makes sense for the target codebase (React, Vue, native, whatever fits). Match the visual output; don't copy the prototype's internal structure unless it happens to fit.
+Everything (bio, jobs, projects, skills, links) lives in **`src/data/profile.ts`**. The résumé PDF is `public/Ruslan_Voshchylo_CV.pdf`; replace it with a file of the same name.
 
-**Don't render these files in a browser or take screenshots unless the user asks you to.** Everything you need — dimensions, colors, layout rules — is spelled out in the source. Read the HTML and CSS directly; a screenshot won't tell you anything they don't.
+## Development
 
-## Bundle contents
+```bash
+npm install
+npm run dev          # http://localhost:5173
+npm test             # unit tests (window manager, terminal, contact form)
+npm run test:e2e     # Playwright: boot, every window, drag/minimize, terminal, mobile
+npm run build        # production build to dist/
+```
 
-- `README.md` — this file
-- `chats/` — conversation transcripts (read these!)
-- `project/` — the `Port` project files (HTML prototypes, assets, components)
+## Deploy
+
+Every push to `main` runs the type check, the unit tests and the e2e tests, then deploys `dist/` to GitHub Pages (`.github/workflows/deploy.yml`). One-time setup: **Settings → Pages → Source: GitHub Actions**.
+
+The build uses a relative base, so it works both as `https://<user>.github.io/` and as `https://<user>.github.io/<repo>/`.
+
+`design/` holds the original Claude Design prototype and chat this site was built from.

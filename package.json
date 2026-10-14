@@ -1,0 +1,37 @@
+{
+  "name": "portos-portfolio",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "PortOS — Ruslan Voshchylo's developer portfolio, styled as a tiny desktop OS.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -b",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.56",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.8",
+    "@types/node": "^22.20.5",
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
+    "@vitejs/plugin-react": "^4.7.0",
+    "autoprefixer": "^10.6.1",
+    "jsdom": "^29.1.1",
+    "postcss": "^8.5.30",
+    "tailwindcss": "3.4",
+    "typescript": "5.6",
+    "vite": "^6.4.4",
+    "vitest": "^3.2.7"
+  }
+}
