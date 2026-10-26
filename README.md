@@ -20,6 +20,7 @@ The intro device matches the screen width:
 | --- | --- |
 | `about.exe` | Bio, stats, résumé download |
 | `experience.exe` | SoftKit and VISO as a `git log --graph`, plus education; project chips deep-link into projects |
+| `references.exe` | Reference letter from my SoftKit mentor: quote, 8–9/10 assessment, full text and the signed PDF (EN + UA) |
 | `projects.exe` | Aksel, Gogeta, Teach Aid, Tripami: cards with metrics and a detail view per project |
 | `skills.exe` | Five skill groups from the CV |
 | `contact.exe` | Email, GitHub, LinkedIn, Telegram, plus a validated form that opens a pre-filled email draft |

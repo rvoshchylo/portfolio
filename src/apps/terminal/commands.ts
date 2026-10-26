@@ -1,4 +1,4 @@
-import { EMAIL, contacts, education, jobs, profile, projects, resumeUrl, skills } from "../../data/profile";
+import { EMAIL, contacts, education, jobs, profile, projects, referenceUrl, references, resumeUrl, skills } from "../../data/profile";
 
 export type Tone = "default" | "muted" | "accent" | "ok" | "error" | "warn";
 export type Line = { text: string; tone?: Tone; color?: string; href?: string };
@@ -11,9 +11,9 @@ export type TermAction =
 
 export type Result = { lines: Line[]; action?: TermAction };
 
-export const OPENABLE = ["about", "experience", "projects", "skills", "contact", "terminal"] as const;
+export const OPENABLE = ["about", "experience", "references", "projects", "skills", "contact", "terminal"] as const;
 
-const FILES = ["about.txt", "experience.log", "projects/", "skills.json", "contact.vcf", "resume.pdf"];
+const FILES = ["about.txt", "experience.log", "projects/", "references.txt", "skills.json", "contact.vcf", "resume.pdf"];
 
 const HELP: [string, string][] = [
   ["help", "show this list"],
@@ -21,6 +21,7 @@ const HELP: [string, string][] = [
   ["about", "short bio"],
   ["experience", "where I've worked + education"],
   ["projects", "what I've shipped"],
+  ["references", "what my mentor says"],
   ["skills", "the toolbox"],
   ["contact", "how to reach me"],
   ["open <app>", `open a window: ${OPENABLE.join(", ")}`],
@@ -31,7 +32,7 @@ const HELP: [string, string][] = [
 ];
 
 export const COMMANDS = [
-  "help", "whoami", "about", "experience", "projects", "skills", "contact", "open", "ls", "cat",
+  "help", "whoami", "about", "experience", "references", "projects", "skills", "contact", "open", "ls", "cat",
   "resume", "cv", "email", "github", "linkedin", "telegram", "clear", "date", "echo", "history",
   "hire-me", "sudo", "exit", "pwd",
 ];
@@ -75,6 +76,17 @@ function skillLines(): Line[] {
     });
   });
   out.push(t("}", "muted"));
+  return out;
+}
+
+function referenceLines(): Line[] {
+  const out: Line[] = [];
+  for (const r of references) {
+    out.push({ text: `“${r.quote}”`, color: "#f5c96b" });
+    out.push(t(`  — ${r.author}, ${r.title} @ ${r.company} · ${r.date} · rated ${r.rating}`, "muted"));
+    out.push({ text: `  signed letter: ${r.file}`, href: referenceUrl(r), color: "#5e9cf5" });
+  }
+  out.push(blank(), t("open references for the full letter", "muted"));
   return out;
 }
 
@@ -125,6 +137,9 @@ export function runCommand(raw: string, history: string[] = []): Result {
       };
     case "skills":
       return { lines: skillLines() };
+    case "references":
+    case "recommendations":
+      return { lines: referenceLines() };
     case "contact":
     case "socials":
       return { lines: [...contactLines(), blank(), t("or: open contact", "muted")] };
@@ -140,6 +155,7 @@ export function runCommand(raw: string, history: string[] = []): Result {
       if (f === "about.txt") return { lines: bio() };
       if (f === "experience.log") return { lines: experience() };
       if (f === "skills.json") return { lines: skillLines() };
+      if (f === "references.txt") return { lines: referenceLines() };
       if (f === "contact.vcf") return { lines: contactLines() };
       if (f === "resume.pdf") return { lines: [t("binary file — opening in a new tab…", "muted")], action: { type: "url", href: resumeUrl() } };
       if (f.startsWith("projects/")) {

@@ -58,6 +58,16 @@ export function Desktop({ onRestart, initialApp }: { onRestart: () => void; init
     if (initialApp && appById(initialApp)) open(initialApp);
   }, [initialApp, open]);
 
+  // …and links like <a href="#references"> work on the live page too.
+  useEffect(() => {
+    const onHash = () => {
+      const id = window.location.hash.slice(1);
+      if (appById(id)) open(id);
+    };
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, [open]);
+
   const top = topWindow(state);
   const openIds = state.wins.filter((w) => !w.closing).map((w) => w.id);
 
@@ -200,7 +210,7 @@ export function Desktop({ onRestart, initialApp }: { onRestart: () => void; init
             className={"frost-strong flex items-end " + (mobile ? "rounded-[18px] px-2 py-1.5 gap-2" : "rounded-[20px] px-3 py-2 gap-3")}
             style={{ boxShadow: "0 20px 60px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.08)" }}
           >
-            {APPS.map((a) => {
+            {APPS.filter((a) => !(mobile && a.id === "references")).map((a) => {
               const isOpen = openIds.includes(a.id);
               return (
                 <div key={a.id} className="dock-item relative flex flex-col items-center gap-1 no-select">

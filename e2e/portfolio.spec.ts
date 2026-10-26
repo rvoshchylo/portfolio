@@ -152,3 +152,18 @@ test("no horizontal overflow on the desktop", async ({ page }) => {
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   expect(overflow).toBeLessThanOrEqual(0);
 });
+
+test("references window shows the mentor letter and links the signed PDF", async ({ page, request }) => {
+  const errors = errorsOf(page);
+  await page.goto("/?skip#experience");
+  await page.getByRole("dialog", { name: "experience.exe" }).getByRole("button", { name: /reference letter/ }).click();
+  const win = page.getByRole("dialog", { name: "references.exe" });
+  await expect(win.getByText("Vladimir Fedorchenko")).toBeVisible();
+  await expect(win.getByText("8–9 / 10")).toBeVisible();
+  await win.getByRole("button", { name: /read full letter/ }).click();
+  await expect(win.getByText(/proven himself to be a responsible/)).toBeVisible();
+  const pdf = await request.get("/Reference_Letter_Ruslan_Voshchylo.pdf");
+  expect(pdf.status()).toBe(200);
+  expect(pdf.headers()["content-type"]).toContain("pdf");
+  expect(errors).toEqual([]);
+});

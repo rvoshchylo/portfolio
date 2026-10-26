@@ -1,4 +1,4 @@
-import { education, jobs, projects } from "../data/profile";
+import { education, jobs, projects, references } from "../data/profile";
 import { useDesktop } from "../desktop/DesktopContext";
 import { Cmd, Tag, card } from "./ui";
 
@@ -47,6 +47,30 @@ export function ExperienceApp() {
             <p className="mt-2 leading-relaxed" style={{ color: "#cfcfd8" }}>
               {j.note}
             </p>
+            {references
+              .filter((r) => r.company === j.company)
+              .map((r) => (
+                <button
+                  key={r.id}
+                  onClick={() => open("references")}
+                  className="proj-card mt-3 w-full text-left rounded-[8px] px-3 py-2.5 flex items-start gap-2.5"
+                  style={{ ...card, borderColor: "rgba(245,177,61,0.3)", background: "rgba(245,177,61,0.06)" }}
+                  title="Open references.exe"
+                >
+                  <span className="text-[14px] leading-none mt-[1px]">📜</span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-[11px] font-semibold" style={{ color: "#f5c96b" }}>
+                      reference letter · {r.author}, {r.title.toLowerCase()} · {r.rating}
+                    </span>
+                    <span className="block mt-0.5 text-[11px] leading-snug truncate" style={{ color: "#9a9aa6" }}>
+                      “{r.quote}”
+                    </span>
+                  </span>
+                  <span className="text-[10px] shrink-0" style={{ color: "#6b6b78" }}>
+                    open →
+                  </span>
+                </button>
+              ))}
             <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
               {j.projects.map((id) => {
                 const p = projects.find((x) => x.id === id)!;

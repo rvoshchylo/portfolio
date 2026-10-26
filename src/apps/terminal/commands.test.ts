@@ -56,3 +56,13 @@ describe("terminal commands", () => {
     expect(complete("ex")).toBe("ex"); // exit / experience
   });
 });
+
+describe("references", () => {
+  it("prints the mentor quote with a link to the signed letter", () => {
+    const r = runCommand("references");
+    expect(text(r)).toContain("Vladimir Fedorchenko");
+    expect(r.lines.some((l) => l.href?.endsWith("Reference_Letter_Ruslan_Voshchylo.pdf"))).toBe(true);
+    expect(text(runCommand("cat references.txt"))).toContain("strong full-stack developer");
+    expect(runCommand("open references").action).toEqual({ type: "open", app: "references" });
+  });
+});

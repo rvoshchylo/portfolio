@@ -269,3 +269,43 @@ export const skills: SkillCategory[] = [
 ];
 
 export const resumeUrl = () => `${import.meta.env.BASE_URL}${profile.resumeFile}`;
+
+export type Reference = {
+  id: string;
+  author: string;
+  title: string;
+  company: string;
+  companyHref?: string;
+  date: string;
+  file: string;
+  /** short pull-quote for cards and the terminal */
+  quote: string;
+  /** the letter's body, verbatim from the English version */
+  body: string[];
+  scores: string[];
+  rating: string;
+};
+
+export const references: Reference[] = [
+  {
+    id: "softkit-mentor",
+    author: "Vladimir Fedorchenko",
+    title: "Mentor",
+    company: "SoftKit",
+    companyHref: "https://www.softkit.dev/",
+    date: "22.10.2026",
+    file: "Reference_Letter_Ruslan_Voshchylo.pdf",
+    quote: "Ruslan is a reliable specialist capable of working effectively both independently and as part of a team. I recommend him as a strong full-stack developer for further professional activity.",
+    body: [
+      "During the period of cooperation, Ruslan Voshchylo has proven himself to be a responsible, independent, and results-oriented full-stack developer.",
+      "Throughout his work, he consistently demonstrated a high level of task execution: he delivered functionality of good quality, met deadlines, prioritized work correctly, and responded promptly to changes in project processes. I would particularly highlight his ability to make decisions independently within his area of responsibility, adapt quickly to the project, and effectively apply technical knowledge (programming languages, frameworks, APIs, CI/CD, cloud services, etc.). Code quality remained at a solid level, with a logical structure and an appropriate approach to implementation.",
+      "Ruslan showed initiative, participated in discussions, proposed ideas for process improvement, and demonstrated a willingness to develop his skills. He took a responsible approach to assigned goals, informed the team about issues in a timely manner, and flexibly aligned with team and project priorities. In teamwork, he demonstrated openness to feedback, clear communication, and respect for colleagues' opinions. Over the course of the collaboration, noticeable progress was observed in time management and communication.",
+      "The overall assessment of his work over recent periods is high (predominantly 8–9 out of 10 across key criteria: focus on results and responsibility, independence, teamwork, performance, and technical skills).",
+      "Ruslan is a reliable specialist capable of working effectively both independently and as part of a team. I recommend him as a strong full-stack developer for further professional activity.",
+    ],
+    scores: ["focus on results & responsibility", "independence", "teamwork", "performance", "technical skills"],
+    rating: "8–9 / 10",
+  },
+];
+
+export const referenceUrl = (r: Reference) => `${import.meta.env.BASE_URL}${r.file}`;
