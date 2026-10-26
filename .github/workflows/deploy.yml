@@ -18,6 +18,12 @@ concurrency:
 jobs:
   test:
     runs-on: ubuntu-24.04
+    # Official Playwright image: Chromium + system deps preinstalled, so CI
+    # doesn't depend on downloading browsers. Keep the tag in sync with
+    # @playwright/test in package-lock.json.
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.1-noble
+      options: --user 1001
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -27,7 +33,6 @@ jobs:
       - run: npm ci
       - run: npm run typecheck
       - run: npm test
-      - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
         env:
           CI: "true"
